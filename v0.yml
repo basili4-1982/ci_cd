@@ -1,0 +1,14 @@
+name: Go CI
+
+on: [push] # Запускается на каждый пуш в любую ветку
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: go build ./... # Пытаемся собрать все пакеты в проекте
