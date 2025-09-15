@@ -1,0 +1,29 @@
+name: Go CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # РЕШЕНИЕ 1: Фиксируем версию Go
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24' # Явно указываем конкретную стабильную версию
+
+      # РЕШЕНИЕ 2: Кэшируем модули для ускорения
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }} # Ключ зависит от go.sum
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Build
+        run: go build ./...
